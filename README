@@ -1,0 +1,40 @@
+
+Web Browser Character Set Tests
+Last modified: January 8, 2012
+
+Requirements:
+1. ICU 4.2 (International Components for Unicode)
+2. A Web server running PHP
+3. Some Web browsers
+4. Ruby 1.9.3
+
+Purpose:
+Test Web browser support for various character encodings. 
+
+Description:
+A couple of tests are included.  One for figuring out which charsets are supported
+simply by looping through all registered aliases and seeing if the contentDocument.charset
+DOM property reflects them.  And another test that attempts to identify which 
+ascii-unsafe[2]  encodings are supported by the browser, by loading a transcoded string
+and seeing if the browser decodes it.
+
+There are more interesting ways to test Web browsers, such as by reverse engineering
+the mapping tables for legacy characters and their mapped Unicode code points.
+
+Contents:
+
+  \src\ianacharsets.rb        # Parse the IANA charset file into the JSON format
+  \src\transcode\transcode.c  # Transcode a string from one charset to another
+  \web\*                      # Web pages for testing
+
+
+[1] ascii-safe
+An ASCII-compatible character encoding is a single-byte or variable-length 
+encoding in which the bytes 0x09, 0x0A, 0x0C, 0x0D, 0x20 - 0x22, 0x26, 0x27, 
+0x2C - 0x3F, 0x41 - 0x5A, and 0x61 - 0x7A, ignoring bytes that are the second 
+and later bytes of multibyte sequences, all correspond to single-byte sequences 
+that map to the same Unicode characters as those bytes in 
+ANSI_X3.4-1968 (US-ASCII). [RFC1345] 
+
+[2] ascii-unsafe
+ASCII-compatible bytes do not map.

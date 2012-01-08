@@ -1,0 +1,192 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<script src="aliases.js"></script>
+<style>
+* {
+  margin: 2px;
+  padding: 2px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-style: italic;
+  color: crimson;
+  margin-bottom: 0.2em;
+  margin-top: 0.2em;
+}
+
+h2 {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+p {
+  margin-top: 0.5em;
+  word-spacing: 0.3ex;
+  display: block;
+}
+
+ul {
+  margin: 10px;
+  padding: 10px;
+}
+
+pre {
+  font-family: 'Bitstream Vera Sans Mono', 'Andale Mono', 'Lucida Console', monospace, fixed;
+  margin-left: 1em;
+  border-width: 0 0 0 5px;
+  border-style: solid;
+  border-color: silver;
+  padding: 1em 0em 1em 1em;
+  margin-left: 1em;
+}
+
+.pass {
+  font-family: 'Georgia', 'Arial', 'Helvetica';
+  color: green;
+}
+
+.fail {
+  font-family: 'Georgia', 'Arial', 'Helvetica';
+  color: red;
+}
+
+.container {
+  float: left;
+  width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+}
+
+.column-left {
+  border: 1px dashed green;
+  width: 250px;
+  float: left;
+  padding: 1em;
+}
+
+.column-center {
+  border: 1px dashed crimson;
+  width: 250px;
+  float: left;
+  padding: 1em;
+}
+
+.column-right {
+  border: 1px dashed yellow;
+  width: 450px;
+  float: left;
+  padding: 1em;
+}
+
+.footer {
+  clear: both;
+}
+</style>
+</head>
+<body>
+<script>
+
+function getEncoding(alias) {
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', "charset.php?alias=" + alias, false);
+	xhr.send();
+
+	var result = document.createElement("span");
+	var resultPass = document.getElementById("resultPass");
+	var resultFail = document.getElementById("resultFail");
+	var resultErr = document.getElementById("resultErr");
+	lbreak = document.createElement("br");
+
+ 	// Does the alias exist?
+	//if(aliases.indexOf(alias) == -1) {
+	//  result.className = "fail";
+	//  result.innerHTML = alias + ",error: alias not found";
+	//  resultErr.appendChild(result);
+	//  resultErr.appendChild(lbreak);
+	//  return;
+	//}
+
+	try {
+	  var resp = xhr.responseText;
+
+	  if (resp == " $%'()*+,-./<>:;=") {
+	    result.className = "pass";
+	    result.id = "pass";
+	    result.innerHTML = alias + ", pass";
+	    resultPass.appendChild(result);
+	    resultPass.appendChild(lbreak);
+	  }
+	  // Check for replacement chars in the respons,
+	  // which mean the conversion failed.
+	  else if (resp == "?" || resp == "!" || resp == "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!") {
+	    result.className = "fail";
+	    result.id = "error";
+	    result.innerHTML = alias + ", conversion error";
+	    resultErr.appendChild(result);
+	    resultErr.appendChild(lbreak);
+	  }
+	  else if (resp == "not found") {
+	    result.className = "fail";
+	    result.id = "error";
+	    result.innerHTML = alias + ", not found";
+	    resultErr.appendChild(result);
+	    resultErr.appendChild(lbreak);
+	  }
+	  else {
+	    result.className = "fail";
+	    result.id = "fail";
+	    result.innerHTML = alias + ", fail";
+	    resultFail.appendChild(result);
+	    resultFail.appendChild(lbreak);
+	  }
+	}
+	catch(err) {
+	  result.className = "fail";
+	  result.id = "error";
+	  result.innerHTML = alias + ", error: " + err.description;
+	  resultErr.appendChild(result);
+	  resultErr.appendChild(lbreak);
+	}
+}
+// Loop through all of the aliases, testing each
+function testEncodings() {
+  for (var i = 0; i < aliases.length; i++) {
+	var alias = aliases[i];
+	getEncoding(alias);
+  }
+}
+
+</script>
+
+<div id="container" class="container">
+  <div id="header" class="header">
+  <h2>Test supported ASCII-incompatible charset encodings</h2>
+  <p>This test runs through 420 charset aliases which are not compatible with ASCII characters less than or equal to 0x7F.  The test case uses a source string which in ASCII looks like:<p>
+  <pre> $%'()*+,-./&lt;&gt;:;=</pre>
+  <p>This test string was chosen for it's syntactically meaninful characters which are used in HTML and other Web protocols.  The source string has been transcoded to each of the target encodings, stored in a plain text file with the alias as its filename and no extension.  An XHR request is generated for each alias.  The response includes a Content-Type header set to text/plain with a charset of the requested alias. For example, when testing UTF-16, the HTTP header returned would be:</p> 
+  <pre>Content-Type: text/plain; charset=UTF-16</pre>
+  <p>The encoded strings have been prepared using ICU to transcode a source string into the target encoding.  The response text is compared in javascript to the expected string, which should match the original, Unicode-encoded source string.  </p>
+  <h3>Some references</h3>
+  <p>ICU was used to perform the transcoding of the source string to each target encoding.</p>
+  <ul>
+    <li>The ICU project <a href="http://demo.icu-project.org/icu-bin/convexp">Converter Explorer</a></li>
+    <li><a href="https://developer.mozilla.org/en/Character_Sets_Supported_by_Gecko">Gecko supported character sets</a></li>
+    <li>Legacy Encodings support in <a href="http://www.opera.com/docs/specs/presto28/encodings/">Opera Presto 2.8</a></li>
+  </ul>
+  <h3>Start the testing...</h3>
+  <p>Either type in a charset alias to run a single test, or run a test of all prepared charset encodings.</p>
+  <input type="text" value="alias" id="test" /><input type="submit" value="Test" onclick="getEncoding(document.getElementById('test').value)" />
+  <input type="submit" value="Run all tests" onclick="testEncodings()"/>
+  <br />
+  </div> <!-- end header -->
+  <div id="resultPass" class="column-left"></div>
+  <div id="resultFail" class="column-center"></div>
+  <div id="resultErr" class="column-right"></div>
+  <div id="footer" class="footer"></div>
+</div> <!-- end container -->
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+<head>
+  <!-- Enable IE9 Standards mode -->
+  <meta http-equiv="X-UA-Compatible" content="IE=9" >
+  <title>Web browser test for supported encodings</title>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <script src="aliases.js" type="text/javascript" defer></script>
+  <script src="compat.js" type="text/javascript" defer></script>
+  <script src="test.js" type="text/javascript" defer></script>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<div id="container" class="container">
+  <div id="header" class="header">
+  <h2>Test all supported charset encodings</h2>
+  <p>This page loops through all known charset aliases, or labels, from <a href="http://www.iana.org/assignments/character-sets">IANA</a> and tests to see whether or not the Web browser supports them.  For each charset alias, a hidden iframe is appended to the document which causes an HTTP request with a response returning that alias in the Content-Type header:<p>
+  <pre>Content-Type: text/plain; charset=UTF-16</pre>
+  <p>The iframe element is checked to determine whether or not its contentDocument.charset (or contentDocument.characterSet) property matches the charset alias used in the test case.  If the two match (case-insensitive) then the Web browser supports the encoding and the test is considered a "pass".  If the two didn't match it was considered a "fail".  </p>
+  <div id="compatCheck"></div>
+  <h3>TODO</h3>
+  <p>1. Map alias groups together so they don't "fail" when they actually just map to an alternative alias e.g. when test case label "greek" results in the Web browser returning a "iso-8859-7" it should be noted as an alternative alias and the test should "pass".</p>
+  <h3>Some references</h3>
+  <p>The following references were useful in creating this test.</p>
+  <ul>
+    <li>The ICU project <a href="http://demo.icu-project.org/icu-bin/convexp">Converter Explorer</a></li>
+    <li>Anne van Kesteren's <a href="http://dump.testsuite.org/encoding/label-test.html">label test</a></li>
+    <li>W3C Encoding specification and <a href="http://dvcs.w3.org/hg/encoding/raw-file/tip/single-octet-encodings.json">associated test cases</a></li>
+    <li><a href="https://developer.mozilla.org/en/Character_Sets_Supported_by_Gecko">Gecko supported character sets</a></li>
+    <li>Legacy Encodings support in <a href="http://www.opera.com/docs/specs/presto28/encodings/">Opera Presto 2.8</a></li>
+  </ul>
+  <h3>Start the testing...</h3>
+  <p>Either type in a charset alias to run a single test, or run a test of all charset aliases.</p>
+  <input type="text" value="alias" id="test">
+  <input type="submit" value="Test" onclick="testRun(document.getElementById('test').value)" >
+  <input type="submit" value="Run all tests" onclick="testEncodings()">
+  <br>
+  </div> <!-- end header -->
+  <div id="resultPass" class="column-left"></div>
+  <div id="resultFail" class="column-center"></div>
+  <div id="resultErr" class="column-right"></div>
+  <div id="footer" class="footer"></div>
+</div> <!-- end container -->
+<div id="testzone" class="testzone"></div>
+</body>
+</html>
