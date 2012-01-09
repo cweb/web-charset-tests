@@ -3,6 +3,9 @@ function report(iframe, testcharset, groupId) {
 	var match = false;
 	numtests_complete++;
 
+  	var teststatus = document.getElementById("teststatus");
+        teststatus.innerHTML = "Testing " + numtests_complete + " of " + numtests + ": " + testcharset;
+
 	if (iframe.contentDocument.charset) {
 	  framecharset = iframe.contentDocument.charset;
 	}
@@ -91,7 +94,6 @@ function report(iframe, testcharset, groupId) {
           resultErr.appendChild(lbreak);
         }	
 
-  	var teststatus = document.getElementById("teststatus");
   	if (numtests == numtests_complete) {
 	  teststatus.setAttribute("class","pass");
   	  teststatus.innerHTML = "All tests complete...!";
@@ -131,9 +133,6 @@ function clearResults() {
 function testEncodings() {
   clearResults();
   var count = 0;
-  var teststatus = document.getElementById("teststatus");
-  teststatus.setAttribute("class","fail");
-  teststatus.innerHTML = "Tests are running...";
   for (var i = 0, l = data.length; i < l; i++) {
     var charset = data[i]
     for (var j = 0, k = charset.labels.length; j < k; j++) {
@@ -153,4 +152,5 @@ xhr.send(null);
 var data = JSON.parse(xhr.responseText);
 var aliases = [];
 
-
+var teststatus = document.getElementById("teststatus");
+teststatus.setAttribute("class","fail");
