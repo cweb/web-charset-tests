@@ -1,6 +1,7 @@
 function report(iframe, testcharset, groupId) {
 	var framecharset = "";
 	var match = false;
+	numtests_complete++;
 
 	if (iframe.contentDocument.charset) {
 	  framecharset = iframe.contentDocument.charset;
@@ -13,6 +14,7 @@ function report(iframe, testcharset, groupId) {
         var resultFail = document.getElementById("resultFail");
         var resultErr = document.getElementById("resultErr");
         var lbreak = document.createElement("br");
+	var cb = document.getElementById("cb");
 
 	// Check if the frame's charset and the test case charset
 	// both exist in the same group.  If so consider them a match
@@ -65,20 +67,21 @@ function report(iframe, testcharset, groupId) {
             resultPass.appendChild(result);
             resultPass.appendChild(lbreak);
           }
-          else if (!match) {
+	  // Hide utf-8 fallback from failure results if the button is checked
+          else if (!match && !(framecharset.toLowerCase() == "utf-8" && cb.checked)) {
             result.className = "fail";
             result.id = "fail";
             result.innerHTML = "test: " + testcharset + ", result: " + framecharset + ", fail";
             resultFail.appendChild(result);
             resultFail.appendChild(lbreak);
           }
-          else {
-            result.className = "fail";
-            result.id = "error";
-            result.innerHTML = testcharset + ", error";
-            resultErr.appendChild(result);
-            resultErr.appendChild(lbreak);
-          }
+          //else {
+          //  result.className = "fail";
+          //  result.id = "error";
+          //  result.innerHTML = testcharset + ", error";
+          //  resultErr.appendChild(result);
+          //  resultErr.appendChild(lbreak);
+          //}
         }
         catch(err) {
           result.className = "fail";
@@ -87,34 +90,67 @@ function report(iframe, testcharset, groupId) {
           resultErr.appendChild(result);
           resultErr.appendChild(lbreak);
         }	
+
+  	var teststatus = document.getElementById("teststatus");
+  	if (numtests == numtests_complete) {
+	  teststatus.setAttribute("class","pass");
+  	  teststatus.innerHTML = "All tests complete...!";
+	}
+
 }
-function testRun(alias, id, groupId) {
-	if (id == undefined) id = 0;
+function testRun(alias, count, groupId) {
+	if (count == undefined) count = 0;
 	// Create an iframe as the target of testing
 	var testzone = document.getElementById("testzone");
 
 	var testframe = document.createElement("iframe");
-	testframe.id = "testframe-" + id;
+	testframe.id = "testframe-" + count;
 	testframe.setAttribute("onload", "report(this, '" + alias + "', " + groupId + ");");
 	testframe.src = "charset.php?alias=" + alias;
 	//testframe.contentDocument.location.href = "charset.php?alias=" + alias;
 	//testframe.contentDocument.location.reload();
 	testzone.appendChild(testframe);
 }
+function clearResults() {
+  var resultPass = document.getElementById("resultPass");
+  var resultFail = document.getElementById("resultFail");
+  var resultErr = document.getElementById("resultErr");
+  // Clear the testzone
+  while (resultPass.hasChildNodes()) {
+    resultPass.removeChild(resultPass.lastChild);
+  }
+  while (resultFail.hasChildNodes()) {
+    resultFail.removeChild(resultFail.lastChild);
+  }
+  while (resultErr.hasChildNodes()) {
+    resultErr.removeChild(resultErr.lastChild);
+  }
+}
 
 // Loop through all of the aliases, testing each
 function testEncodings() {
+  clearResults();
+  var count = 0;
+  var teststatus = document.getElementById("teststatus");
+  teststatus.setAttribute("class","fail");
+  teststatus.innerHTML = "Tests are running...";
   for (var i = 0, l = data.length; i < l; i++) {
     var charset = data[i]
     for (var j = 0, k = charset.labels.length; j < k; j++) {
-      testRun(charset.labels[j],j,i);
+      count++;
+      numtests++;
+      testRun(charset.labels[j],count,i);
     }
   }
 }
 
+var numtests = 0;
+var numtests_complete = 0;
 var xhr = new XMLHttpRequest();
 xhr.open("GET", "charsets.json", false);
 xhr.send(null);
 
 var data = JSON.parse(xhr.responseText);
 var aliases = [];
+
+
