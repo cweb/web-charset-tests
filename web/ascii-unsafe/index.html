@@ -41,6 +41,7 @@ ASCII-compatible bytes do not map.</p>
   <p>Either type in a charset alias to run a single test, or run a test of all prepared charset encodings.</p>
   <input type="text" value="alias" id="test" /><input type="submit" value="Test" onclick="getEncoding(document.getElementById('test').value)" />
   <input type="submit" value="Run all tests" onclick="testEncodings()"/>
+  <span id="teststatus"></span>
   <br />
   </div> <!-- end header -->
   <div id="resultPass" class="column-left"></div>
