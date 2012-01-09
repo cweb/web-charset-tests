@@ -43,8 +43,10 @@ response.body.each_line do |line|
 
 	if result && result[1] == "Alias:"
 		label = result[2]
-		# Continue adding alias labels
-		json.concat(",\"" + label + "\"")
+		# Continue adding alias labels, ignoring those labeled "None"
+		if label != "None"
+			json.concat(",\"" + label + "\"")
+		end
 	end
 end
 

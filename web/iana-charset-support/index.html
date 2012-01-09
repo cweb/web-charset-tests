@@ -3,9 +3,8 @@
 <head>
   <!-- Enable IE9 Standards mode -->
   <meta http-equiv="X-UA-Compatible" content="IE=9" >
-  <title>Web browser test for supported encodings</title>
+  <title>Web browser charset label tests</title>
   <meta http-equiv="content-type" content="text/html;charset=UTF-8">
-  <script src="aliases.js" type="text/javascript" defer></script>
   <script src="compat.js" type="text/javascript" defer></script>
   <script src="test.js" type="text/javascript" defer></script>
   <link rel="stylesheet" type="text/css" href="style.css">
@@ -13,13 +12,16 @@
 <body>
 <div id="container" class="container">
   <div id="header" class="header">
-  <h2>Test all supported charset encodings</h2>
-  <p>This page loops through all known charset aliases, or labels, from <a href="http://www.iana.org/assignments/character-sets">IANA</a> and tests to see whether or not the Web browser supports them.  For each charset alias, a hidden iframe is appended to the document which causes an HTTP request with a response returning that alias in the Content-Type header:<p>
+  <h2>Tests for Web browser supported charset encodings</h2>
+  <p>This page loops through all known charset aliases, or labels, from <a href="http://www.iana.org/assignments/character-sets">IANA</a> and tests to see whether or not the Web browser supports them.  For each charset alias, a hidden iframe is appended to the document which causes an HTTP request to a PHP page that responds with that alias in the Content-Type header:<p>
   <pre>Content-Type: text/plain; charset=UTF-16</pre>
-  <p>The iframe element is checked to determine whether or not its contentDocument.charset (or contentDocument.characterSet) property matches the charset alias used in the test case.  If the two match (case-insensitive) then the Web browser supports the encoding and the test is considered a "pass".  If the two didn't match it was considered a "fail".  </p>
+  <p>The iframe element is checked to determine whether or not its contentDocument.charset (or contentDocument.characterSet) property matches the charset alias used in the test case.  A "match" is considered true when a) the charset names are identical and b) the charset names are not identical but exist in the same alias group together (which means they are simply aliases for one another).  If the two match (case-insensitive) then the Web browser supports the encoding and the test is considered a "pass".  If the two didn't match it was considered a "fail".  </p>
+  <h3>Caveats</h3>
+  <p>The test compares alias groupings strictly according to IANA's <a href="http://www.iana.org/assignments/character-sets">documented charsets</a>.  That is, though "latin5" may be a superset of "windows-1254", the test would report a <span class="fail">fail</span> when such a mapping was returned.  That's because IANA has not listed them as aliases for one another, and rightfully so, after all the mapping tables are quite different between <a href="http://demo.icu-project.org/icu-bin/convexp?conv=ibm-920_P100-1995&s=ALL">latin5</a> and <a href="http://demo.icu-project.org/icu-bin/convexp?conv=ibm-5350_P100-1998&s=ALL">windows-1254</a>, in the range 0x80 to 0x9F.</p>
   <div id="compatCheck"></div>
   <h3>TODO</h3>
-  <p>1. Map alias groups together so they don't "fail" when they actually just map to an alternative alias e.g. when test case label "greek" results in the Web browser returning a "iso-8859-7" it should be noted as an alternative alias and the test should "pass".</p>
+  <p style="text-decoration: line-through">1. Map alias groups together so they don't "fail" when they actually just map to an alternative alias e.g. when test case label "greek" results in the Web browser returning a "iso-8859-7" it should be noted as an alternative alias and the test should "pass".</p>
+  <p>1. Optionally hide all failures that fallback to UTF-8</p>
   <h3>Some references</h3>
   <p>The following references were useful in creating this test.</p>
   <ul>
@@ -32,7 +34,7 @@
   <h3>Start the testing...</h3>
   <p>Either type in a charset alias to run a single test, or run a test of all charset aliases.</p>
   <input type="text" value="alias" id="test">
-  <input type="submit" value="Test" onclick="testRun(document.getElementById('test').value)" >
+  <input type="submit" value="Test" onclick="testRun(document.getElementById('test').value), null" >
   <input type="submit" value="Run all tests" onclick="testEncodings()">
   <br>
   </div> <!-- end header -->
