@@ -1,0 +1,9 @@
+# For publishing to a Web server
+
+# Do not export .git* files
+.gitignore export-ignore
+.gitattributes export-ignore
+
+# Do not export unnecessary src files
+/src export-ignore
+
