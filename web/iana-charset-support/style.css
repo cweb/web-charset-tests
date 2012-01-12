@@ -43,19 +43,24 @@ iframe {
   visibility: hidden;
 }
 
+.testcase {
+  font-family: 'Bitstream Vera Sans Mono', 'Andale Mono', 'Lucida Console', monospace, fixed;
+  color: gray;
+}
+
 .pass {
-  font-family: 'Georgia', 'Arial', 'Helvetica';
+  font-family: 'Bitstream Vera Sans Mono', 'Andale Mono', 'Lucida Console', monospace, fixed;
   color: green;
 }
 
 .fail {
-  font-family: 'Georgia', 'Arial', 'Helvetica';
+  font-family: 'Bitstream Vera Sans Mono', 'Andale Mono', 'Lucida Console', monospace, fixed;
   color: red;
 }
 
 .container {
   float: left;
-  width: 1250px;
+  width: 1200px;
   margin: 0 auto;
 }
 
@@ -64,21 +69,21 @@ iframe {
 
 .column-left {
   border: 1px dashed green;
-  width: 400px;
-  float: left;
-  padding: 1em;
-}
-
-.column-center {
-  border: 1px dashed crimson;
-  width: 400px;
+  width: 550px;
   float: left;
   padding: 1em;
 }
 
 .column-right {
+  border: 1px dashed crimson;
+  width: 550px;
+  float: left;
+  padding: 1em;
+}
+
+.column-error {
   border: 1px dashed yellow;
-  width: 300px;
+  width: 400px;
   float: left;
   padding: 1em;
 }
