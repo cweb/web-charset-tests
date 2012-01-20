@@ -66,7 +66,7 @@ function report(iframe, testcharset, groupId) {
     if (match) {
       result.className = "pass";
       result.id = "pass";
-      result.innerHTML = testcharset + " <span class='testcase'>, " + framecharset + "</span>";
+      result.innerHTML = testcharset + " <span class='framecharset'>, " + framecharset + "</span>";
       resultPass.appendChild(result);
       resultPass.appendChild(lbreak);
     }
@@ -74,7 +74,7 @@ function report(iframe, testcharset, groupId) {
     else if (!match && !(framecharset.toLowerCase() == "utf-8" && cb.checked)) {
       result.className = "fail";
       result.id = "fail";
-      result.innerHTML = testcharset + " <span class='testcase'>, " + framecharset + "</span>";
+      result.innerHTML = testcharset + " <span class='framecharset'>, " + framecharset + "</span>";
       resultFail.appendChild(result);
       resultFail.appendChild(lbreak);
     }
@@ -89,7 +89,7 @@ function report(iframe, testcharset, groupId) {
   catch(err) {
     result.className = "fail";
     result.id = "error";
-    result.innerHTML = "<span class='testcase'>" + testcharset + ",</span> error: " + err.description;
+    result.innerHTML = "<span class='fail'>" + testcharset + ",</span> error: " + err.description;
     resultErr.appendChild(result);
     resultErr.appendChild(lbreak);
   }	

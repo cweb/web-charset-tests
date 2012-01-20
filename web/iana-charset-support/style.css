@@ -48,6 +48,11 @@ iframe {
   color: gray;
 }
 
+.framecharset {
+  font-family: 'Bitstream Vera Sans Mono', 'Andale Mono', 'Lucida Console', monospace, fixed;
+  color: gray;
+}
+
 .pass {
   font-family: 'Bitstream Vera Sans Mono', 'Andale Mono', 'Lucida Console', monospace, fixed;
   color: green;
@@ -74,11 +79,19 @@ iframe {
   padding: 1em;
 }
 
+.column-left:before {
+  content: "<span class='pass'>PASS</span> results";
+}
+
 .column-right {
   border: 1px dashed crimson;
   width: 550px;
   float: left;
   padding: 1em;
+}
+
+.column-right:before {
+  content: "<span class='fail'>FAIL</span> results";
 }
 
 .column-error {
