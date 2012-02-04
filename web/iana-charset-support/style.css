@@ -80,7 +80,10 @@ iframe {
 }
 
 .column-left:before {
-  content: "<span class='pass'>PASS</span> results";
+  content: "PASS results";
+  display: block;
+  font-weight: bolder;
+  text-decoration: underline;
 }
 
 .column-right {
@@ -91,7 +94,10 @@ iframe {
 }
 
 .column-right:before {
-  content: "<span class='fail'>FAIL</span> results";
+  content: "FAIL results";
+  display: block;
+  font-weight: bolder;
+  text-decoration: underline;
 }
 
 .column-error {

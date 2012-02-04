@@ -70,8 +70,8 @@ function report(iframe, testcharset, groupId) {
       resultPass.appendChild(result);
       resultPass.appendChild(lbreak);
     }
-    // Hide utf-8 fallback from failure results if the button is checked
-    else if (!match && !(framecharset.toLowerCase() == "utf-8" && cb.checked)) {
+    // Hide utf-8 and iso-8859-1 fallback from failure results if the button is checked
+    else if (!match && !((framecharset.toLowerCase() == "utf-8" || framecharset.toLowerCase() == "iso-8859-1") && cb.checked)) {
       result.className = "fail";
       result.id = "fail";
       result.innerHTML = testcharset + " <span class='framecharset'>, " + framecharset + "</span>";
